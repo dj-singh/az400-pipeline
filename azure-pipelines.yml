@@ -1,0 +1,25 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'a400-training-conn'
+    subscriptionId: 'd241fbd5-4f6c-456f-81fa-749bd3f5c460'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'rgp-az400'
+    location: 'West US 2'
+    templateLocation: 'Linked artifact'
+    csmFile: 'CreateWebApp/azuredeploy.json'
+    overrideParameters: '-projectName djaz400  -linkedTemplateUri https://raw.githubusercontent.com/dj-singh/az400-pipeline/master/CreateWebApp/linkedStorageAccount.json'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
